@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, HttpStatus, Inject } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { User } from '../../../model/entity/UserEntity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,9 +17,8 @@ export class RolesGuard implements CanActivate {
 
     // 在请求对象中获取 user 对象，此 user 对象是 AuthStrategy 中 validate 方法成功执行后的返回值
     const request = context.switchToHttp().getRequest();
-    const user: User = request.user;
+    const user = request.user;
     // 判断当前请求用户的角色是否为管理员
-    // @ts-ignore
     const hasRole = () => user.role === 1;
     return user && hasRole();
     // return true;

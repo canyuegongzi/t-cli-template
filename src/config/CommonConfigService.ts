@@ -2,14 +2,11 @@ import {CommonConfigInterface} from './CommonConfigInterface';
 import { parse, stringify } from 'yaml';
 import * as fs from 'fs';
 import {join} from 'path';
-const isDevelopment: boolean = process.env.NODE_ENV === 'development';
-const envConfigFile = isDevelopment ?
-    fs.readFileSync(join(__dirname, '.', 'dev.yaml'), 'utf-8')
-    : fs.readFileSync(join(__dirname, '.', 'pro.yaml'), 'utf-8');
+const envConfigFile = fs.readFileSync(join(__dirname, '.', 'application.yaml'), 'utf-8')
 const envConfig = parse(envConfigFile);
 const { mysqlConfig, mongodbConfig, kafkaConfig, rabbitMQConfig, redisConfig, emailConfig, serverConfig } = envConfig;
 
-export class CommonConfigService {
+class CommonConfig {
     public readonly envConfig: CommonConfigInterface;
     private readonly processEnv: CommonConfigInterface;
     constructor() {
@@ -49,4 +46,15 @@ export class CommonConfigService {
         } as CommonConfigInterface;
     }
 }
+
+export const CommonConfigService = (() => {
+    let config = null;
+    return () => {
+        if (config instanceof CommonConfig) {
+            return config;
+        }
+        config = new CommonConfig();
+        return config
+    }
+})()
 export {emailConfig, serverConfig};
