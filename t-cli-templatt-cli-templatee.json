@@ -10,6 +10,15 @@
       "description": "nest模板"
     },
     {
+      "name": "node-simple-typescript",
+      "type": "server",
+      "url": [
+        "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#node-simple-typescript",
+        "direct:https://github.com/canyuegongzi/t-cli-template.git#node-simple-typescript"
+      ],
+      "description": "node + typescript开发、调试环境"
+    },
+    {
       "name": "web-webpack4-typescript",
       "type": "web",
       "url": [
