@@ -3,7 +3,7 @@ import { Module,VuexModule,Mutation,Action,getModule, MutationAction } from 'vue
 @Module({
     name: 'appModule',
     namespaced: true,
-    stateFactory: true,
+    // stateFactory: true
 })
 export default class AppStoreModule extends VuexModule {
     public vuexStatus: number = 0;
