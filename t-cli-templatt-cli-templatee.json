@@ -52,7 +52,7 @@
         "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#web-webpack4-react-javascript",
         "direct:https://github.com/canyuegongzi/t-cli.git#web-webpack4-react-javascript"
       ],
-      "description": "web端 webpack4 + react + typeScript 模板"
+      "description": "web端 webpack4 + react + javascript 模板"
     }
   ],
   "categoryList": ["web", "server"]
