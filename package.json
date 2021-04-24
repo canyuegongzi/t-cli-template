@@ -1,7 +1,7 @@
 {
   "name": "web-webpack4-typescript",
   "version": "1.0.0",
-  "description": "",
+  "description": "web-webpack4-typescript",
   "main": "src/main.ts",
   "scripts": {
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
