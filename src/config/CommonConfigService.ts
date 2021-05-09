@@ -2,7 +2,10 @@ import {CommonConfigInterface} from './CommonConfigInterface';
 import { parse, stringify } from 'yaml';
 import * as fs from 'fs';
 import {join} from 'path';
-const envConfigFile = fs.readFileSync(join(__dirname, '.', 'application.yaml'), 'utf-8')
+const isDevelopment: boolean = process.env.NODE_ENV === 'development';
+const devConfig = fs.readFileSync(join(__dirname, '.', 'application.dev.yaml'), 'utf-8');
+const proConfig = fs.readFileSync(join(__dirname, '.', 'application.pro.yaml'), 'utf-8');
+const envConfigFile = isDevelopment? devConfig: proConfig;
 const envConfig = parse(envConfigFile);
 const { mysqlConfig, mongodbConfig, kafkaConfig, rabbitMQConfig, redisConfig, emailConfig, serverConfig } = envConfig;
 
