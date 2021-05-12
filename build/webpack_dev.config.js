@@ -6,7 +6,7 @@ module.exports = {
     entry: ['@babel/polyfill', './src/main.js'],
     output: {
         path: path.resolve(__dirname, '../', "dist"),
-        filename: "bundle.[hash:8].js"
+        filename: "bundle.[chunkhash:8].js"
     },
     resolve: {
         extensions: ['.js', '.vue'],

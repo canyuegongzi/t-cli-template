@@ -24,21 +24,9 @@ const commonRules = [
         exclude: /node_modules/,
         loader: "babel-loader",
     },
-    // {
-    //     test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-    //     use: {
-    //         loader: 'url-loader',
-    //         options: {
-    //             name: '[name].[ext]',
-    //             limit: 20*1024,
-    //             outputPath: 'assets/'
-    //         }
-    //     }
-    // },
-    // webpack5  内置图片处理器
     {
         test: /\.png|jpg|gif|jpeg|svg/,
-        type: 'asset',
+        type: 'asset/resource',
         parser: {
             dataUrlCondition: {
                 maxSize: 10 * 1024,
@@ -50,7 +38,7 @@ const commonRules = [
     },
     {
         test: /\.(eot|ttf|woff|woff2)(\?\S*)?$/,
-        type: 'asset',
+        type: 'asset/resource',
         generator: {
             filename: 'fonts/[base]',
         },

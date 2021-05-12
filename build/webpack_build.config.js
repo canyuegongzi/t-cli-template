@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const {commonRules, commonPlugins} = require('./webpack_common.config');
 module.exports = {
@@ -11,7 +12,8 @@ module.exports = {
     output: {
         publicPath: './',
         path: path.resolve(__dirname, '../', "dist"),
-        filename: '[name].[hash:8].js',
+        filename: '[name].[chunkhash:8].js',
+        clean: true,
     },
     resolve: {
         extensions: ['.js', '.vue'],
@@ -26,7 +28,12 @@ module.exports = {
         }
     },
     optimization: {
+        usedExports: true, // 识别无用代码
+        minimize: true,    // 将无用代码在打包中删除
+        concatenateModules: true, // 尽可能将所有模块合并输出到一个函数中
+        // runtimeChunk: 'single',
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 commons: {
                     name: "commons",
@@ -57,7 +64,7 @@ module.exports = {
                     }
                 },
             }),
-            new OptimizeCssAssetsPlugin()
+            new CssMinimizerPlugin(),
         ]
     },
     plugins: [

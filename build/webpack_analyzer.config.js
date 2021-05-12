@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -14,7 +15,8 @@ const config = {
     output: {
         publicPath: './',
         path: path.resolve(__dirname, '../', "dist"),
-        filename: "bundle.[hash:8].js"
+        filename: '[name].[chunkhash:8].js',
+        clean: true,
     },
     resolve: {
         extensions: ['.js', '.vue'],
@@ -29,7 +31,12 @@ const config = {
         }
     },
     optimization: {
+        usedExports: true, // 识别无用代码
+        minimize: true,    // 将无用代码在打包中删除
+        concatenateModules: true, // 尽可能将所有模块合并输出到一个函数中
+        // runtimeChunk: 'single',
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 commons: {
                     name: "commons",
@@ -69,6 +76,7 @@ const config = {
             template: "./public/index.html"
         }),
         new BundleAnalyzerPlugin(),
+        new VueLoaderPlugin(),
         ...commonPlugins
     ],
     module: {
