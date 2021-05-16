@@ -71,6 +71,15 @@
         "direct:https://github.com/canyuegongzi/t-cli.git#web-webpack5-vue2-javascript"
       ],
       "description": "web端 webpack5 + vue2 + javascript 模板"
+    },
+    {
+      "name": "web-webpack5-vue2-typescript",
+      "type": "web",
+      "url": [
+        "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#web-webpack5-vue2-typescript",
+        "direct:https://github.com/canyuegongzi/t-cli.git#web-webpack5-vue2-typescript"
+      ],
+      "description": "web端 webpack5 + vue2 + typescript 模板"
     }
   ],
   "categoryList": ["web", "server"]
