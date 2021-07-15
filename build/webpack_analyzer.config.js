@@ -3,7 +3,7 @@ const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin-webpack5');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const {commonRules, commonPlugins} = require('./webpack_common.config');
 const SpeedMeasurePlugin=require('speed-measure-webpack-plugin')
@@ -67,7 +67,7 @@ const config = {
                     }
                 },
             }),
-            new OptimizeCssAssetsPlugin()
+            new CssMinimizerPlugin(),
         ]
     },
     plugins: [

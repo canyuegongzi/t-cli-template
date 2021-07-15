@@ -8,6 +8,7 @@ module.exports = {
         path: path.resolve(__dirname, '../', "dist"),
         filename: "bundle.[chunkhash:8].js"
     },
+    target: 'web',
     resolve: {
         extensions: ['.js', '.vue'],
         alias: {
@@ -33,6 +34,7 @@ module.exports = {
         contentBase: path.join(__dirname, './dist'),
         open: true,
         port: 9005,
+        hot: true,
     },
     // devtool: 'eval-source-map',
     devtool: false,
