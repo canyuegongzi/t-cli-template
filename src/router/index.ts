@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import { outputStaticUrl } from '../../config/utils/outputStaticUrl';
+
 import type { RouteRecordRaw } from 'vue-router';
 
 // 默认路由
@@ -20,10 +22,12 @@ export const defaultRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/about/about.vue'),
   },
 ];
-
+console.log(process.env);
 const router = createRouter({
   routes: defaultRoutes,
-  history: createWebHistory(),
+  history: createWebHistory(
+    outputStaticUrl(process.env.NODE_ENV === 'production')
+  ),
 });
 
 export default router;

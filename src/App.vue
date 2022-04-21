@@ -1,5 +1,6 @@
 <template>
   <div class="app-wrap">
+    <img src="@/assets/img/author.jpg" width="50" alt="" />
     <router-link to="/">
       <div>跳转首页</div>
     </router-link>

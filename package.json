@@ -14,9 +14,9 @@
     "push": "cz && standard-version",
     "release": "standard-version",
     "start": "cross-env webpack serve --config ./config/webpack.common.ts --env development",
-    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack-template webpack serve --config ./config/webpack.common.ts --env development",
-    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack-template webpack serve --config ./config/webpack.common.ts --env development",
-    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack-template webpack serve --config ./config/webpack.common.ts --env production",
+    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
+    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
+    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env production",
     "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./config/webpack.common.ts --env development"
   },
   "config": {
