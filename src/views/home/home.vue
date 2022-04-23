@@ -1,8 +1,5 @@
 <template>
-  <div class="home-wrap">
-    home页面
-    <img src="@/assets/img/author.jpg" width="100" alt="" />
-  </div>
+  <div class="home-wrap">home页面</div>
 </template>
 
 <script lang="ts">

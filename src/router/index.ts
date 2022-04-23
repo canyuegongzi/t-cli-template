@@ -22,7 +22,6 @@ export const defaultRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/about/about.vue'),
   },
 ];
-console.log(process.env);
 const router = createRouter({
   routes: defaultRoutes,
   history: createWebHistory(
