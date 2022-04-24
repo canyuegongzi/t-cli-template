@@ -67,7 +67,6 @@
     "postcss-loader": "^6.2.1",
     "postcss-preset-env": "^7.4.2",
     "prettier": "^2.5.1",
-    "purgecss-webpack-plugin": "^4.0.3",
     "sass": "^1.45.2",
     "sass-loader": "^12.4.0",
     "standard-version": "^9.3.2",
