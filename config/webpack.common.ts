@@ -12,7 +12,7 @@ import { merge } from 'webpack-merge';
 import WebpackBar from 'webpackbar';
 
 import { chalkINFO, emoji } from './utils/chalkTip';
-import { outputStaticUrl } from './utils/outputStaticUrl';
+import { outputStaticUrl, APP_NAME } from './utils/outputStaticUrl';
 import devConfig from './webpack.dev';
 import prodConfig from './webpack.prod';
 
@@ -243,7 +243,7 @@ const commonConfig = (isProduction) => {
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        title: '自然博客后台',
+        title: APP_NAME || 'Vue_App',
         template: './public/index.html',
         hash: true,
         minify: isProduction
