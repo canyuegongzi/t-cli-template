@@ -1,18 +1,26 @@
 import { defineStore } from 'pinia';
 
+import { mockAjax } from '@/utils/index';
 type RootState = {
-  token: string | null;
+  detail: any;
 };
 
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
-      token: 'sdgsg',
+      detail: { id: -1 },
     } as RootState;
   },
   actions: {
-    setToken(res) {
-      this.token = res;
+    async setDetail(payload: number) {
+      console.log('setDetail的payload', payload);
+      try {
+        const data: any = await mockAjax(payload === 1);
+        console.log(data);
+        this.detail = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

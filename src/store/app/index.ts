@@ -3,12 +3,12 @@ import { defineStore } from 'pinia';
 export const useAppStore = defineStore('app', {
   state: () => {
     return {
-      version: 1,
+      counter: 1,
     };
   },
   actions: {
-    setVersion(res) {
-      this.version = res;
+    setCounter(res) {
+      this.counter = res;
     },
   },
 });

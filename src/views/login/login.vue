@@ -1,5 +1,8 @@
 <template>
-  <div class="login-wrap">login页面</div>
+  <div class="login-wrap">
+    <h1>login页面</h1>
+    <p>欢迎登录！</p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,6 +15,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .login-wrap {
-  color: orange;
+  padding: 20px;
+  background-color: aqua;
 }
 </style>

@@ -1,46 +1,28 @@
 <template>
   <div class="app-wrap">
-    <img src="@/assets/img/author.jpg" width="50" alt="" />
-    <router-link to="/">
-      <div>跳转首页</div>
-    </router-link>
-    <router-link to="/login">
-      <div>跳转login</div>
-    </router-link>
-    <router-link to="/about">
-      <div>跳转about</div>
-    </router-link>
-    <div class="pinia-info">
-      <h2>pinia状态管理</h2>
-      <div>token: {{ token }}</div>
-      <div>version: {{ version }}</div>
-      <div @click="handleVersion">设置version</div>
-      <div @click="handleToken">设置token</div>
+    <div style="width: 100px; height: 100px">
+      <img src="@/assets/img/author.jpg" width="100" alt="" />
+    </div>
+    <div>
+      <router-link to="/"> 点击跳转首页 </router-link>
+    </div>
+    <div>
+      <router-link to="/login"> 点击跳转login </router-link>
+    </div>
+    <div>
+      <router-link to="/about"> 点击跳转about </router-link>
     </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef } from 'vue';
-
-import { useAppStore } from '@/store/app';
-import { useUserStore } from '@/store/user';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {},
   setup() {
-    const userStore = useUserStore();
-    const appStore = useAppStore();
-    const token = toRef(userStore, 'token');
-    const version = toRef(appStore, 'version');
-    const handleVersion = () => {
-      appStore.setVersion(++version.value);
-    };
-    const handleToken = () => {
-      appStore.setVersion(Math.random().toString().slice(2, 8));
-    };
-    return { token, version, handleVersion, handleToken };
+    return {};
   },
 });
 </script>

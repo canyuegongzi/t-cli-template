@@ -23,16 +23,26 @@ export const deepClone = (obj) => {
   return clone(obj, undefined);
 };
 
-export const mockAjax = async (time = 1000) => {
-  return new Promise((resolve, reject) => {
+/** 模拟ajax请求 */
+export const mockAjax = async (flag?: boolean) => {
+  return new Promise((resolve, rejected) => {
     setTimeout(() => {
-      resolve({
-        code: 0,
-        data: {
-          name: '张三',
-          age: 18,
-        },
-      });
-    }, time);
+      if (flag) {
+        resolve({
+          code: 200,
+          data: {
+            id: 1,
+            name: '张三',
+            age: 18,
+            token: Math.random(),
+          },
+        });
+      } else {
+        rejected({
+          code: 400,
+          msg: '请求失败',
+        });
+      }
+    }, 500);
   });
 };
