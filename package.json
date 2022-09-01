@@ -1,7 +1,10 @@
 {
   "name": "vue3-webpack5-template",
   "version": "0.0.0",
-  "repository": "https://github.com/galaxy-s10/vue3-webpack5-template.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/galaxy-s10/vue3-webpack5-template.git"
+  },
   "license": "MIT",
   "author": "shuisheng <2274751790@qq.com>",
   "scripts": {
@@ -17,7 +20,8 @@
     "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
     "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
     "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env production",
-    "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./config/webpack.common.ts --env development"
+    "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./config/webpack.common.ts --env development",
+    "typecheck": "tsc -p ./tsconfig.json --noEmit"
   },
   "config": {
     "commitizen": {

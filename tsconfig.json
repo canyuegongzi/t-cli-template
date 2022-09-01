@@ -10,6 +10,7 @@
     "esModuleInterop": true, // ES 模块互操作,import React from 'react';react是module.exports导出的，因此需要设置该属性
     "forceConsistentCasingInFileNames": true, //在文件名中强制使用一致的大小写
     "skipLibCheck": true, // 跳过d.ts声明文件的类型检查。
+    "resolveJsonModule": true, //解析json模块
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
@@ -21,7 +22,8 @@
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
-    }
+    },
+    "transpileOnly": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "config/**/*.ts"] // 仅仅匹配这些文件，除了src以外的文件都不会被匹配
 }

@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import path from 'path';
 
 import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
@@ -6,33 +7,125 @@ import ESLintPlugin from 'eslint-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { VueLoaderPlugin } from 'vue-loader';
-import { DefinePlugin } from 'webpack';
+import { DefinePlugin, Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import WebpackBar from 'webpackbar';
 
-import { chalkINFO, emoji } from './utils/chalkTip';
-import { outputStaticUrl, APP_NAME } from './utils/outputStaticUrl';
+import pkg from '../package.json';
+import { outputDir } from './constant';
+import { chalkINFO, chalkWARN } from './utils/chalkTip';
+import { outputStaticUrl } from './utils/outputStaticUrl';
 import devConfig from './webpack.dev';
 import prodConfig from './webpack.prod';
 
-console.log(
-  chalkINFO(`读取: ${__filename.slice(__dirname.length + 1)}`),
-  emoji.get('white_check_mark')
-);
+let commitHash;
+let commitUserName;
+let commitDate;
+let commitMessage;
+try {
+  // commit哈希
+  commitHash = execSync('git show -s --format=%H').toString().trim();
+  // commit用户名
+  commitUserName = execSync('git show -s --format=%cn').toString().trim();
+  // commit日期
+  commitDate = new Date(
+    execSync(`git show -s --format=%cd`).toString()
+  ).toLocaleString();
+  // commit消息
+  commitMessage = execSync('git show -s --format=%s').toString().trim();
+} catch (error) {
+  console.log(error);
+}
 
-const commonConfig = (isProduction) => {
-  const result = {
-    // 入口，默认src/index.js
-    entry: {
-      shared: ['vue', 'vue-router', 'pinia'],
-      main: {
-        import: './src/main.ts',
-        // filename: 'output-[name]-bundle.js', //默认情况下，入口 chunk 的输出文件名是从 output.filename 中提取出来的，但你可以为特定的入口指定一个自定义的输出文件名。
+console.log(chalkINFO(`读取: ${__filename.slice(__dirname.length + 1)}`));
+
+const sassRules = (isProduction: boolean, module?: boolean) => {
+  return [
+    isProduction
+      ? {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '../',
+          },
+        }
+      : {
+          loader: 'vue-style-loader',
+          options: {
+            sourceMap: false,
+          },
+        },
+    {
+      loader: 'css-loader', // 默认会自动找postcss.config.js
+      options: {
+        importLoaders: 2, // https://www.npmjs.com/package/css-loader#importloaders
+        sourceMap: false,
+        modules: module
+          ? {
+              localIdentName: '[name]_[local]_[hash:base64:5]',
+            }
+          : undefined,
       },
     },
+    {
+      loader: 'postcss-loader', // 默认会自动找postcss.config.js
+      options: {
+        sourceMap: false,
+      },
+    },
+    {
+      loader: 'sass-loader',
+      options: {
+        sourceMap: false,
+      },
+    },
+  ].filter(Boolean);
+};
 
-    // 输出
+const cssRules = (isProduction: boolean, module?: boolean) => {
+  return [
+    isProduction
+      ? {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '../',
+          },
+        }
+      : {
+          loader: 'vue-style-loader',
+          options: {
+            sourceMap: false,
+          },
+        },
+    {
+      loader: 'css-loader', // 默认会自动找postcss.config.js
+      options: {
+        importLoaders: 1, // https://www.npmjs.com/package/css-loader#importloaders
+        sourceMap: false,
+        modules: module
+          ? {
+              localIdentName: '[name]_[local]_[hash:base64:5]',
+            }
+          : undefined,
+      },
+    },
+    {
+      loader: 'postcss-loader', // 默认会自动找postcss.config.js
+      options: {
+        sourceMap: false,
+      },
+    },
+  ].filter(Boolean);
+};
+
+const commonConfig = (isProduction) => {
+  const result: Configuration = {
+    entry: {
+      // shared: ['vue', 'vue-router', 'pinia'],
+      main: {
+        import: './src/main.ts',
+      },
+    },
     output: {
       clean: true, // 在生成文件之前清空 output 目录。替代clean-webpack-plugin
       filename: 'js/[name]-[contenthash:6]-bundle.js', // 入口文件打包生成后的文件的文件名
@@ -43,7 +136,7 @@ const commonConfig = (isProduction) => {
        * 这个模块会打包进bundle.js，而不会单独抽离出来。
        */
       chunkFilename: 'js/[name]-[contenthash:6]-bundle-chunk.js',
-      path: path.resolve(__dirname, '../dist'),
+      path: path.resolve(__dirname, `../${outputDir}`),
       assetModuleFilename: 'assets/[name]-[contenthash:6].[ext]', // 静态资源生成目录（不管什么资源默认都统一生成到这里,除非单独设置了generator）
       /**
        * webpack-dev-server 也会默认从 publicPath 为基准，使用它来决定在哪个目录下启用服务，来访问 webpack 输出的文件。
@@ -68,50 +161,46 @@ const commonConfig = (isProduction) => {
       // 解析路径
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'], // 解析扩展名
       alias: {
-        // 如果不设置这个alias，webpack就会解析不到import xxx '@/xxx'中的@
         '@': path.resolve(__dirname, '../src'), // 设置路径别名
         vue$: 'vue/dist/vue.runtime.esm-bundler.js', // 设置vue的路径别名
+      },
+      fallback: {
+        /**
+         * webpack5移除了nodejs的polyfill，更专注于web了？
+         * 其实webpack5之前的版本能用nodejs的polyfill，也是
+         * 和nodejs正统的api不一样，比如path模块，nodejs的path，
+         * __dirname是读取到的系统级的文件绝对路径的（即/user/xxx）
+         * 但在webpack里面使用__dirname，读取到的是webpack配置的绝对路径/
+         * 可能有用的polyfill就是crypto这些通用的模块，类似path和fs这些模
+         * 块其实都是他们的polyfill都是跑着浏览器的，只是有这些api原本的一些功能，
+         * 还是没有nodejs的能力，所以webpack5干脆就移除了这些polyfill，你可以通过
+         * 安装他们的polyfill来实现原本webpack4之前的功能，但是即使安装他们的polyfill
+         * 也只是实现api的功能，没有他们原本在node的能力
+         */
+        // path: require.resolve('path-browserify'),
       },
     },
     resolveLoader: {
       // 用于解析webpack的loader
       modules: ['node_modules'],
     },
-    cache: {
-      // type: 'memory',
-      type: 'filesystem',
-      buildDependencies: {
-        // https://webpack.js.org/configuration/cache/#cacheallowcollectingmemory
-        // 建议cache.buildDependencies.config: [__filename]在您的 webpack 配置中设置以获取最新配置和所有依赖项。
-        config: [__filename],
-      },
-    },
+    // cache: {
+    //   type: 'filesystem',
+    //   buildDependencies: {
+    //     // https://webpack.js.org/configuration/cache/#cacheallowcollectingmemory
+    //     // 建议cache.buildDependencies.config: [__filename]在您的 webpack 配置中设置以获取最新配置和所有依赖项。
+    //     config: [__filename],
+    //   },
+    // },
     module: {
-      noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
+      noParse: /^(vue|vue-router)$/,
       // loader执行顺序：从下往上，从右往左
       rules: [
         {
           test: /\.vue$/,
           use: [
-            // {
-            //   loader: 'cache-loader',
-            //   options: {
-            //     cacheDirectory: path.resolve(
-            //       __dirname,
-            //       '../node_modules/.cache/vue-loader'
-            //     ),
-            //     cacheIdentifier: '12345',
-            //   },
-            // },
             {
               loader: 'vue-loader',
-              // options: {
-              //   cacheDirectory: path.resolve(
-              //     __dirname,
-              //     '../node_modules/.cache/vue-loader'
-              //   ),
-              //   cacheIdentifier: '12345',
-              // },
             },
           ],
         },
@@ -119,7 +208,7 @@ const commonConfig = (isProduction) => {
           test: /\.jsx?$/,
           exclude: /node_modules/,
           use: [
-            'thread-loader',
+            // 'thread-loader',
             {
               loader: 'babel-loader',
               options: {
@@ -130,7 +219,7 @@ const commonConfig = (isProduction) => {
           ],
         },
         {
-          test: /\.tsx?$/,
+          test: /\.ts$/,
           exclude: /node_modules/,
           use: [
             {
@@ -146,56 +235,73 @@ const commonConfig = (isProduction) => {
                 appendTsSuffixTo: ['\\.vue$'],
                 // If you want to speed up compilation significantly you can set this flag. https://www.npmjs.com/package/ts-loader#transpileonly
                 transpileOnly: true,
+                happyPackMode: false,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.tsx$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+                cacheCompression: false, // https://github.com/facebook/create-react-app/issues/6846
+              },
+            },
+            {
+              loader: 'ts-loader',
+              options: {
+                appendTsxSuffixTo: ['\\.vue$'],
+                // If you want to speed up compilation significantly you can set this flag. https://www.npmjs.com/package/ts-loader#transpileonly
+                transpileOnly: true,
+                happyPackMode: false,
               },
             },
           ],
         },
         {
           test: /\.css$/,
-          use: [
-            isProduction
-              ? {
-                  loader: MiniCssExtractPlugin.loader,
-                  options: {
-                    /**
-                     * you can specify a publicPath here, by default it uses publicPath in webpackOptions.output
-                     * 即默认打包的css文件是webpackOptions.output的publicPath，
-                     * 但在new MiniCssExtractPlugin()时候，设置了打包生成的文件在dist下面的css目录里，
-                     */
-                    publicPath: '../',
-                  },
-                }
-              : { loader: 'vue-style-loader' }, // Do not use style-loader and mini-css-extract-plugin together.
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 1, // 在css文件里面@import了其他资源，就回到上一个loader，在上一个loader那里重新解析@import里的资源
-              },
+              resourceQuery: /module/,
+              use: cssRules(isProduction, true),
             },
-            'postcss-loader', // 默认会自动找postcss.config.js
-          ].filter(Boolean),
+            {
+              resourceQuery: /\?vue/,
+              use: cssRules(isProduction),
+            },
+            {
+              test: /\.module\.\w+$/,
+              use: cssRules(isProduction, true),
+            },
+            {
+              use: cssRules(isProduction),
+            },
+          ],
           sideEffects: true, // 告诉webpack是有副作用的，不对css进行删除
         },
         {
           test: /\.(sass|scss)$/,
-          use: [
-            isProduction
-              ? {
-                  loader: MiniCssExtractPlugin.loader,
-                  options: {
-                    publicPath: '../',
-                  },
-                }
-              : { loader: 'vue-style-loader' },
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 2, // https://www.npmjs.com/package/css-loader#importloaders
-              },
+              resourceQuery: /module/,
+              use: sassRules(isProduction, true),
             },
-            'postcss-loader', // 默认会自动找postcss.config.js
-            { loader: 'sass-loader' },
-          ].filter(Boolean),
+            {
+              resourceQuery: /\?vue/,
+              use: sassRules(isProduction),
+            },
+            {
+              test: /\.module\.\w+$/,
+              use: sassRules(isProduction, true),
+            },
+            {
+              use: sassRules(isProduction),
+            },
+          ],
           sideEffects: true,
         },
         {
@@ -211,7 +317,6 @@ const commonConfig = (isProduction) => {
           },
         },
         {
-          // test: /\.(eot|ttf|woff2?)\??.*$/,
           test: /\.(eot|ttf|woff2?)$/,
           type: 'asset/resource',
           generator: {
@@ -243,7 +348,7 @@ const commonConfig = (isProduction) => {
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        title: APP_NAME || 'Vue_App',
+        title: '自然博客后台',
         template: './public/index.html',
         hash: true,
         minify: isProduction
@@ -292,11 +397,24 @@ const commonConfig = (isProduction) => {
           VUE_APP_RELEASE_PROJECT_ENV: JSON.stringify(
             process.env.VUE_APP_RELEASE_PROJECT_ENV
           ),
+          VUE_APP_RELEASE_PROJECT_LASTBUILD: JSON.stringify(
+            new Date().toLocaleString()
+          ),
+          VUE_APP_RELEASE_PROJECT_PACKAGE: JSON.stringify({
+            name: pkg.name,
+            version: pkg.version,
+            repository: pkg.repository.url,
+          }),
+          VUE_APP_RELEASE_PROJECT_GIT: JSON.stringify({
+            commitHash,
+            commitDate,
+            commitUserName,
+            commitMessage,
+          }),
         },
         __VUE_OPTIONS_API__: 'true',
         __VUE_PROD_DEVTOOLS__: 'false',
       }),
-      // bundle分析
       process.env.WEBPACK_ANALYZER_SWITCH &&
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',
@@ -311,25 +429,18 @@ const commonConfig = (isProduction) => {
 export default (env) => {
   return new Promise((resolve) => {
     const isProduction = env.production;
-    /**
-     * 注意：在node环境下，给process.env这个对象添加的所有属性，都会默认转成字符串,
-     * 如果给process.env.NODE_ENV = undefined，赋值的时候node会将undefined转成"undefined"再赋值
-     * 即约等于：process.env.NODE_ENV = "undefined",
-     * 如果是process.env.num = 123，最终就是：process.env.num = "123"。
-     * 所以，尽量不要将非字符串赋值给process.env[属性名]！
-     */
-    // 如果是process.env.production = isProduction，这样的话，process.env.production就要么是字符串"true"，要么是字符串"undefined"
-    // 改进：process.env.production = isProduction?true:false,这样的话，process.env.production就要么是字符串"true"，要么是字符串"false"
-    // 这里要先判断isProduction，判断完再将字符串赋值给process.env.NODE_ENV，就万无一失了
     process.env.NODE_ENV = isProduction ? 'production' : 'development';
-    // prodConfig返回的是普通对象，devConfig返回的是promise，使用Promise.resolve进行包装
     const configPromise = Promise.resolve(
       isProduction ? prodConfig : devConfig
     );
     configPromise.then((config: any) => {
       // 根据当前环境，合并配置文件
       const mergeConfig = merge(commonConfig(isProduction), config);
-      console.log(chalkINFO(`当前是: ${process.env.NODE_ENV}环境`));
+      console.log(
+        chalkWARN(
+          `根据当前环境，合并配置文件，当前是: ${process.env.NODE_ENV}环境`
+        )
+      );
       resolve(mergeConfig);
     });
   });
