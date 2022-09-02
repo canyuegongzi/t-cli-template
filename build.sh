@@ -6,7 +6,7 @@
 # Email: 2274751790@qq.com
 # FilePath: /vue3-webpack5-template/build.sh
 # Github: https://github.com/galaxy-s10
-# LastEditTime: 2022-09-02 12:50:53
+# LastEditTime: 2022-09-02 13:04:01
 # LastEditors: shuisheng
 ###
 
@@ -60,4 +60,4 @@ else
   echo 开始构建$ENV环境:
 fi
 
-npx cross-env VUE_APP_RELEASE_PROJECT_NAME=$JOBNAME VUE_APP_RELEASE_PROJECT_ENV=$ENV webpack --config ./config/webpack.common.ts --env production
+npx cross-env VUE_APP_RELEASE_PROJECT_NAME=$JOBNAME VUE_APP_RELEASE_PROJECT_ENV=$ENV webpack --config ./script/config/webpack.common.ts --env production
