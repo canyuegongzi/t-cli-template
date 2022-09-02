@@ -1,6 +1,5 @@
+import { outputStaticUrl } from 'script/utils/outputStaticUrl';
 import { createRouter, createWebHistory } from 'vue-router';
-
-import { outputStaticUrl } from '../../config/utils/outputStaticUrl';
 
 import type { RouteRecordRaw } from 'vue-router';
 

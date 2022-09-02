@@ -8,7 +8,7 @@
   "license": "MIT",
   "author": "shuisheng <2274751790@qq.com>",
   "scripts": {
-    "build": "webpack --config ./config/webpack.common.ts --env production",
+    "build": "webpack --config ./script/config/webpack.common.ts --env production",
     "commit": "cz",
     "lint": "eslint --config ./.eslintrc.js . --ext .js,.jsx,.ts,.tsx,.vue",
     "lint:fix": "eslint --config ./.eslintrc.js . --ext .js,.jsx,.ts,.tsx,.vue --fix",
@@ -16,11 +16,11 @@
     "prettier": "prettier --write .",
     "push": "cz && standard-version",
     "release": "standard-version",
-    "start": "cross-env webpack serve --config ./config/webpack.common.ts --env development",
-    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
-    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env development",
-    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./config/webpack.common.ts --env production",
-    "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./config/webpack.common.ts --env development",
+    "start": "cross-env webpack serve --config ./script/config/webpack.common.ts --env development",
+    "start:beta": "cross-env VUE_APP_RELEASE_PROJECT_ENV=beta VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./script/config/webpack.common.ts --env development",
+    "start:preview": "cross-env VUE_APP_RELEASE_PROJECT_ENV=preview VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./script/config/webpack.common.ts --env development",
+    "start:prod": "cross-env VUE_APP_RELEASE_PROJECT_ENV=prod VUE_APP_RELEASE_PROJECT_NAME=vue3-webpack5-template webpack serve --config ./script/config/webpack.common.ts --env production",
+    "start:stats": "cross-env WEBPACK_ANALYZER_SWITCH=true webpack serve --config ./script/config/webpack.common.ts --env development",
     "typecheck": "tsc -p ./tsconfig.json --noEmit"
   },
   "config": {
@@ -29,9 +29,12 @@
     }
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "chalk": "^4",
     "core-js": "^3.17.2",
     "pinia": "^2.0.11",
     "vue": "^3.2.31",
+    "vue-demi": "^0.13.11",
     "vue-router": "^4.0.13"
   },
   "devDependencies": {
@@ -49,7 +52,7 @@
     "babel-loader": "^8.2.2",
     "commitizen": "^4.2.4",
     "compression-webpack-plugin": "^9.2.0",
-    "copy-webpack-plugin": "^10.2.4",
+    "copy-webpack-plugin": "^8.1.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^3.0.0",
@@ -75,6 +78,7 @@
     "sass-loader": "^12.4.0",
     "standard-version": "^9.3.2",
     "terser": "^5.7.0",
+    "terser-webpack-plugin": "^5.3.6",
     "thread-loader": "^3.0.4",
     "ts-loader": "^9.2.7",
     "typescript": "^4.6.2",

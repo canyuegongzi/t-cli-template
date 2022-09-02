@@ -18,7 +18,7 @@ export default defineComponent({
     const appStore = useAppStore();
     const counter = toRef(appStore, 'counter');
     const handlecounter = () => {
-      appStore.setCounter(++counter.value);
+      appStore.setCounter((counter.value += 1));
     };
 
     return { counter, handlecounter };

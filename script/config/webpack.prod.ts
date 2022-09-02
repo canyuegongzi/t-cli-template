@@ -1,4 +1,5 @@
 import PreloadPlugin from '@vue/preload-webpack-plugin';
+import { version as axiosVersion } from 'axios/package.json';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import HtmlWebpackTagsPlugin from 'html-webpack-tags-plugin';
@@ -10,7 +11,7 @@ import { version as vueRouterVersion } from 'vue-router/package.json';
 import { version as vueVersion } from 'vue/package.json';
 import { Configuration } from 'webpack';
 
-import { chalkINFO } from './utils/chalkTip';
+import { chalkINFO } from '../utils/chalkTip';
 
 console.log(chalkINFO(`读取: ${__filename.slice(__dirname.length + 1)}`));
 
@@ -22,6 +23,7 @@ export default new Promise((resolve) => {
       vue: 'Vue',
       'vue-router': 'VueRouter',
       pinia: 'Pinia',
+      axios: 'axios',
     },
     optimization: {
       /**
@@ -144,6 +146,7 @@ export default new Promise((resolve) => {
         scripts: [
           `https://unpkg.com/vue@${vueVersion}/dist/vue.global.prod.js`,
           `https://unpkg.com/vue-router@${vueRouterVersion}/dist/vue-router.global.prod.js`,
+          `https://unpkg.com/axios@${axiosVersion}/dist/axios.min.js`,
           `https://unpkg.com/vue-demi@${vueDemiVersion}/lib/index.iife.js`,
           `https://unpkg.com/pinia@${piniaVersion}/dist/pinia.iife.prod.js`,
         ],

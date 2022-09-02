@@ -26,7 +26,7 @@ export default defineComponent({
     const userDetail = toRef(userStore, 'detail');
     const counter = toRef(appStore, 'counter');
     const handlecounter = () => {
-      appStore.setCounter(++counter.value);
+      appStore.setCounter((counter.value += 1));
     };
     const handleInfo = (num) => {
       userStore.setDetail(num);

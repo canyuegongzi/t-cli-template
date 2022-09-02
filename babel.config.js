@@ -19,7 +19,7 @@ module.exports = {
          */
         useBuiltIns: 'usage',
         corejs: 3,
-        modules: 'auto', //modules设置成commonjs后，路由懒加载就没了。
+        modules: 'auto', // modules设置成commonjs后，路由懒加载就没了。
         // modules: 'commonjs', // https://github.com/vuejs/vue-cli/blob/HEAD/packages/@vue/babel-preset-app/index.js#L226
       },
     ],
