@@ -3,7 +3,7 @@ import portfinder from 'portfinder';
 import { Configuration } from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import ConsoleDebugPlugin from '../consoleDebugPlugin';
+import TerminalPrintPlugin from '../TerminalPrintPlugin';
 import { chalkINFO } from '../utils/chalkTip';
 import { outputStaticUrl } from '../utils/outputStaticUrl';
 import { resolveApp } from '../utils/path';
@@ -126,9 +126,9 @@ export default new Promise((resolve) => {
             async: true,
           }),
           // 打印控制调试地址
-          new ConsoleDebugPlugin({
+          new TerminalPrintPlugin({
             local: `http://localhost:${port}${outputStaticUrl(false)}`,
-            network: `http://${localIPv4}:${port}${outputStaticUrl(false)}`,
+            network: `http://${localIPv4!}:${port}${outputStaticUrl(false)}`,
           }),
         ],
       };
