@@ -9,11 +9,10 @@ import { VueLoaderPlugin } from 'vue-loader';
 import { DefinePlugin, Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import WebpackBar from 'webpackbar';
 
 import pkg from '../../package.json';
 import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
-import { outputDir } from '../constant';
+import { eslintEnable, outputDir } from '../constant';
 import { chalkINFO, chalkWARN } from '../utils/chalkTip';
 import { outputStaticUrl } from '../utils/outputStaticUrl';
 import { resolveApp } from '../utils/path';
@@ -328,22 +327,21 @@ const commonConfig = (isProduction) => {
       ],
     },
     plugins: [
-      // 构建进度条
-      new WebpackBar(),
       // 友好的显示错误信息在终端
       new FriendlyErrorsWebpackPlugin(),
       // 解析vue
       new VueLoaderPlugin(),
       // eslint
-      new ESLintPlugin({
-        extensions: ['js', 'jsx', 'ts', 'tsx', 'vue'],
-        emitError: false, // 发现的错误将始终发出，禁用设置为false.
-        emitWarning: false, // 找到的警告将始终发出，禁用设置为false.
-        failOnError: false, // 如果有任何错误，将导致模块构建失败，禁用设置为false
-        failOnWarning: false, // 如果有任何警告，将导致模块构建失败，禁用设置为false
-        cache: true,
-        cacheLocation: resolveApp('./node_modules/.cache/.eslintcache'),
-      }),
+      eslintEnable &&
+        new ESLintPlugin({
+          extensions: ['js', 'jsx', 'ts', 'tsx', 'vue'],
+          emitError: false, // 发现的错误将始终发出，禁用设置为false.
+          emitWarning: false, // 找到的警告将始终发出，禁用设置为false.
+          failOnError: false, // 如果有任何错误，将导致模块构建失败，禁用设置为false
+          failOnWarning: false, // 如果有任何警告，将导致模块构建失败，禁用设置为false
+          cache: true,
+          cacheLocation: resolveApp('./node_modules/.cache/.eslintcache'),
+        }),
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包
       new HtmlWebpackPlugin({
         filename: 'index.html',
