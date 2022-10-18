@@ -1,7 +1,11 @@
 <template>
   <div class="app-wrap">
     <div style="width: 100px; height: 100px">
-      <img src="@/assets/img/author.jpg" width="100" alt="" />
+      <img
+        src="@/assets/img/author.jpg"
+        width="100"
+        alt=""
+      />
     </div>
     <div>
       <router-link to="/"> 点击跳转首页 </router-link>

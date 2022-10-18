@@ -1,5 +1,3 @@
-import { execSync } from 'child_process';
-
 import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
@@ -10,7 +8,6 @@ import { DefinePlugin, Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 
-import pkg from '../../package.json';
 import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
 import { eslintEnable, outputDir } from '../constant';
 import { chalkINFO, chalkWARN } from '../utils/chalkTip';
@@ -18,25 +15,6 @@ import { outputStaticUrl } from '../utils/outputStaticUrl';
 import { resolveApp } from '../utils/path';
 import devConfig from './webpack.dev';
 import prodConfig from './webpack.prod';
-
-let commitHash;
-let commitUserName;
-let commitDate;
-let commitMessage;
-try {
-  // commit哈希
-  commitHash = execSync('git show -s --format=%H').toString().trim();
-  // commit用户名
-  commitUserName = execSync('git show -s --format=%cn').toString().trim();
-  // commit日期
-  commitDate = new Date(
-    execSync(`git show -s --format=%cd`).toString()
-  ).toLocaleString();
-  // commit消息
-  commitMessage = execSync('git show -s --format=%s').toString().trim();
-} catch (error) {
-  console.log(error);
-}
 
 console.log(chalkINFO(`读取: ${__filename.slice(__dirname.length + 1)}`));
 
@@ -121,7 +99,6 @@ const cssRules = (isProduction: boolean, module?: boolean) => {
 const commonConfig = (isProduction) => {
   const result: Configuration = {
     entry: {
-      // shared: ['vue', 'vue-router', 'pinia'],
       main: {
         import: './src/main.ts',
       },
@@ -185,14 +162,14 @@ const commonConfig = (isProduction) => {
       // 用于解析webpack的loader
       modules: ['node_modules'],
     },
-    // cache: {
-    //   type: 'filesystem',
-    //   buildDependencies: {
-    //     // https://webpack.js.org/configuration/cache/#cacheallowcollectingmemory
-    //     // 建议cache.buildDependencies.config: [__filename]在您的 webpack 配置中设置以获取最新配置和所有依赖项。
-    //     config: [__filename],
-    //   },
-    // },
+    cache: {
+      type: 'filesystem',
+      buildDependencies: {
+        // https://webpack.js.org/configuration/cache/#cacheallowcollectingmemory
+        // 建议cache.buildDependencies.config: [__filename]在您的 webpack 配置中设置以获取最新配置和所有依赖项。
+        config: [__filename],
+      },
+    },
     module: {
       noParse: /^(vue|vue-router)$/,
       // loader执行顺序：从下往上，从右往左
@@ -398,20 +375,6 @@ const commonConfig = (isProduction) => {
           VUE_APP_RELEASE_PROJECT_ENV: JSON.stringify(
             process.env.VUE_APP_RELEASE_PROJECT_ENV
           ),
-          VUE_APP_RELEASE_PROJECT_LASTBUILD: JSON.stringify(
-            new Date().toLocaleString()
-          ),
-          VUE_APP_RELEASE_PROJECT_PACKAGE: JSON.stringify({
-            name: pkg.name,
-            version: pkg.version,
-            repository: pkg.repository.url,
-          }),
-          VUE_APP_RELEASE_PROJECT_GIT: JSON.stringify({
-            commitHash,
-            commitDate,
-            commitUserName,
-            commitMessage,
-          }),
         },
         __VUE_OPTIONS_API__: 'true',
         __VUE_PROD_DEVTOOLS__: 'false',
@@ -434,15 +397,20 @@ export default (env) => {
     const configPromise = Promise.resolve(
       isProduction ? prodConfig : devConfig
     );
-    configPromise.then((config: any) => {
-      // 根据当前环境，合并配置文件
-      const mergeConfig = merge(commonConfig(isProduction), config);
-      console.log(
-        chalkWARN(
-          `根据当前环境，合并配置文件，当前是: ${process.env.NODE_ENV}环境`
-        )
-      );
-      resolve(mergeConfig);
-    });
+    configPromise.then(
+      (config: any) => {
+        // 根据当前环境，合并配置文件
+        const mergeConfig = merge(commonConfig(isProduction), config);
+        console.log(
+          chalkWARN(
+            `根据当前环境，合并配置文件，当前是: ${process.env.NODE_ENV!}环境`
+          )
+        );
+        resolve(mergeConfig);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   });
 };

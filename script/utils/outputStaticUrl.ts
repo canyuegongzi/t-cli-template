@@ -13,9 +13,9 @@ export const outputStaticUrl = (isProduction: boolean) => {
   if (isProduction) {
     // 如果是jenkins里面构建，会执行build.sh，一定会有APP_NAME，APP_ENV可能是：'null'|'beta'|'preview'|'prod'
     if (APP_ENV === 'null') {
-      return `/${APP_NAME}/`;
+      return `/${APP_NAME!}/`;
     } else {
-      return `/${APP_NAME}/${APP_ENV}/`;
+      return `/${APP_NAME!}/${APP_ENV!}/`;
     }
   } else {
     if (APP_NAME === undefined) {

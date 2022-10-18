@@ -29,7 +29,14 @@ export default defineComponent({
       appStore.setCounter((counter.value += 1));
     };
     const handleInfo = (num) => {
-      userStore.setDetail(num);
+      userStore.setDetail(num).then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     };
 
     return { userInfo, userDetail, counter, handlecounter, handleInfo };

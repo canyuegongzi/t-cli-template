@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 import { mockAjax } from '@/utils/index';
+
 type RootState = {
   detail: any;
 };

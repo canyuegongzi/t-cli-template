@@ -28,5 +28,13 @@
     "transpileOnly": true // 只编译，报警告或者错误一样运行
   },
   // 仅仅匹配这些文件，除了src以外的文件都不会被匹配
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "script/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "script/**/*.ts",
+    "./.eslintrc.js",
+    "./babel.config.js",
+    "./postcss.config.js"
+  ]
 }
