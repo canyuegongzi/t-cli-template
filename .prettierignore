@@ -1,8 +1,4 @@
 /dist/
 /public/
 /node_modules/
-.gitignore
-.prettierignore
-.eslintignore
-.browserlistrc
-.editorconfig
+pnpm-lock.yaml

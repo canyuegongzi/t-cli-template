@@ -4,13 +4,3 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
-interface Window {
-  $message: {
-    info: any;
-    success: any;
-    warning: any;
-    error: any;
-    loading: any;
-    default: any;
-  };
-}

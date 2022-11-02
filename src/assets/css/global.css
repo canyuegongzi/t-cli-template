@@ -1,0 +1,24 @@
+@charset "UTF-8";
+:root {
+  --dark-primary-color: "red";
+  --light-primary-color: blue;
+}
+
+@keyframes flashTxtMove {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 120%;
+  }
+}
+@keyframes flashImgMove {
+  0% {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  100% {
+    transform: translate(50%, 80%) rotate(45deg);
+  }
+}
+/* 这段注释不会被删除,但是压缩模式下还是会被删除 */
+/*! 这段注释在压缩模式下也不会被删除,常用于声明版权 */
