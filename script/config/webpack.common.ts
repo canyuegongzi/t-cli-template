@@ -9,7 +9,7 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 
 import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
-import { eslintEnable, outputDir } from '../constant';
+import { eslintEnable, outputDir, analyzerEnable } from '../constant';
 import { chalkINFO, chalkWARN } from '../utils/chalkTip';
 import { outputStaticUrl } from '../utils/outputStaticUrl';
 import { resolveApp } from '../utils/path';
@@ -56,7 +56,7 @@ const sassRules = (isProduction: boolean, module?: boolean) => {
       options: {
         sourceMap: false,
         // 根据sass-loader9.x以后使用additionalData，9.x以前使用prependData
-        additionalData: `@import '~@/assets/css/global.scss';`,
+        additionalData: `@use '~@/assets/css/global/global.scss';`,
       },
     },
   ].filter(Boolean);
@@ -325,7 +325,7 @@ const commonConfig = (isProduction) => {
       new HtmlWebpackPlugin({
         filename: 'index.html',
         title: 'vue3-webpack5-template',
-        template: './public/index.html',
+        template: resolveApp('./public/index.html'),
         hash: true,
         minify: isProduction
           ? {
@@ -380,7 +380,7 @@ const commonConfig = (isProduction) => {
         __VUE_OPTIONS_API__: 'true',
         __VUE_PROD_DEVTOOLS__: 'false',
       }),
-      process.env.WEBPACK_ANALYZER_SWITCH &&
+      analyzerEnable &&
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',
           generateStatsFile: true,

@@ -21,17 +21,6 @@
     <div>
       <router-link to="/about"> 点击跳转about </router-link>
     </div>
-    333
-    <div class="aaa"></div>
-    <div class="bbb"></div>
-    <div class="ccc">dd223222323dd</div>
-    <div class="flashImg">
-      <img
-        src="https://resource.hsslive.cn/image/1578937683585vueblog.webp"
-        alt=""
-        width="100"
-      />
-    </div>
 
     <router-view></router-view>
   </div>
@@ -49,8 +38,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/common.scss';
-
 .app-wrap {
   // background-color: red;
   // @extend %flexCenter;
@@ -61,18 +48,18 @@ export default defineComponent({
   // @include multiEllipsis;
   // width: 10px;
   // height: 10px;
-  @include arrow('left', 10px);
+  // @include arrow('left', 10px);
 }
 .bbb {
   // @include colorText();
   // @include multiEllipsis;
   // width: 10px;
   // height: 10px;
-  @include arrow('left', 10px);
+  // @include arrow('left', 10px);
 }
 .ccc {
   // @include colorText();
-  @include flashTxt;
+  // @include flashTxt;
   // @include colorText('#8a2387, #f27121', 'to left');
 }
 .flashImg {
@@ -83,7 +70,7 @@ export default defineComponent({
   //   url('https://resource.hsslive.cn/image/1578937683585vueblog.webp')
   // );
   img {
-    @include shadow;
+    // @include shadow;
   }
 }
 </style>
