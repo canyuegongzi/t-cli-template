@@ -35,6 +35,7 @@
     "script/**/*.ts",
     "./.eslintrc.js",
     "./babel.config.js",
-    "./postcss.config.js"
+    "./postcss.config.js",
+    "windi.config.ts"
   ]
 }

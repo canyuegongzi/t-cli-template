@@ -1,1 +1,6 @@
-{}
+{
+  "editor.codeActionsOnSave": {
+    // 在保存时运行的代码操作类型。
+    "source.fixAll.eslint": true
+  }
+}

@@ -5,6 +5,8 @@ import App from './App.vue';
 import router from '@/router/index';
 import store from '@/store/index';
 import './main.scss';
+// import 'windi.css'; // windicss-webpack-plugin会解析windi.css这个MODULE_ID
+
 // import '@/assets/css/common.scss';
 
 // console.log(process.env);

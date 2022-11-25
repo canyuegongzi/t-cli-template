@@ -7,6 +7,7 @@ import { VueLoaderPlugin } from 'vue-loader';
 import { DefinePlugin, Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
+import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
 
 import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
 import { eslintEnable, outputDir, analyzerEnable } from '../constant';
@@ -56,7 +57,7 @@ const sassRules = (isProduction: boolean, module?: boolean) => {
       options: {
         sourceMap: false,
         // 根据sass-loader9.x以后使用additionalData，9.x以前使用prependData
-        additionalData: `@use '~@/assets/css/global/global.scss';`,
+        // additionalData: `@use '~@/assets/css/global/global.scss';`,
       },
     },
   ].filter(Boolean);
@@ -310,17 +311,8 @@ const commonConfig = (isProduction) => {
       new FriendlyErrorsWebpackPlugin(),
       // 解析vue
       new VueLoaderPlugin(),
-      // eslint
-      eslintEnable &&
-        new ESLintPlugin({
-          extensions: ['js', 'jsx', 'ts', 'tsx', 'vue'],
-          emitError: false, // 发现的错误将始终发出，禁用设置为false.
-          emitWarning: false, // 找到的警告将始终发出，禁用设置为false.
-          failOnError: false, // 如果有任何错误，将导致模块构建失败，禁用设置为false
-          failOnWarning: false, // 如果有任何警告，将导致模块构建失败，禁用设置为false
-          cache: true,
-          cacheLocation: resolveApp('./node_modules/.cache/.eslintcache'),
-        }),
+      // windicss
+      // new WindiCSSWebpackPlugin(),
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包
       new HtmlWebpackPlugin({
         filename: 'index.html',
@@ -380,12 +372,24 @@ const commonConfig = (isProduction) => {
         __VUE_OPTIONS_API__: 'true',
         __VUE_PROD_DEVTOOLS__: 'false',
       }),
+      // bundle分析
       analyzerEnable &&
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',
           generateStatsFile: true,
           statsOptions: { source: false },
         }), // configuration.plugins should be one of these object { apply, … } | function
+      // eslint
+      eslintEnable &&
+        new ESLintPlugin({
+          extensions: ['js', 'jsx', 'ts', 'tsx', 'vue'],
+          emitError: false, // 发现的错误将始终发出，禁用设置为false.
+          emitWarning: false, // 找到的警告将始终发出，禁用设置为false.
+          failOnError: false, // 如果有任何错误，将导致模块构建失败，禁用设置为false
+          failOnWarning: false, // 如果有任何警告，将导致模块构建失败，禁用设置为false
+          cache: true,
+          cacheLocation: resolveApp('./node_modules/.cache/.eslintcache'),
+        }),
     ].filter(Boolean),
   };
   return result;

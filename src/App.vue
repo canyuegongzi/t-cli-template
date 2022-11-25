@@ -18,9 +18,7 @@
     <div>
       <router-link to="/login"> 点击跳转login </router-link>
     </div>
-    <div>
-      <router-link to="/about"> 点击跳转about </router-link>
-    </div>
+    <div><router-link to="/about"> 点击跳转about </router-link></div>
 
     <router-view></router-view>
   </div>

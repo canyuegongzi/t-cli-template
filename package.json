@@ -42,6 +42,7 @@
     "@commitlint/config-conventional": "^16.0.0",
     "@rushstack/eslint-patch": "^1.1.0",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
+    "@types/node": "^18.11.9",
     "@typescript-eslint/parser": "^5.8.1",
     "@vue/compiler-sfc": "^3.2.31",
     "@vue/eslint-config-prettier": "^7.0.0",
@@ -90,6 +91,7 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.2",
     "webpack-merge": "^5.7.3",
-    "webpackbar": "^5.0.0-3"
+    "webpackbar": "^5.0.0-3",
+    "windicss-webpack-plugin": "^1.7.7"
   }
 }
