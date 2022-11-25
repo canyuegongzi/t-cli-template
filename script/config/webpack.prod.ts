@@ -100,28 +100,31 @@ const prodConfig: Configuration = {
     minimizer: [
       new TerserPlugin({
         parallel: true, // 使用多进程并发运行以提高构建速度
-        extractComments: false, // 默认true,会将@preserve、@license
+        extractComments: false, // 默认true,会将/^\**!|@preserve|@license|@cc_on/i的注释提取到单独的文件中
+        // Terser 压缩配置
         terserOptions: {
-          // Terser 压缩配置
           parse: {
-            // default {},如果希望指定其他解析选项，请传递一个对象。
+            // 注意：terserOptions.parse被标记了deprecated。
           },
           compress: {
-            // default {},传递false表示完全跳过压缩。传递一个对象来指定自定义压缩选项。
-            arguments: true, // default: false,尽可能将参数[index]替换为函数参数名
-            dead_code: true, // 删除死代码，默认就会删除，实际测试设置false也没用，还是会删除
-            toplevel: false, // default: false,在顶级作用域中删除未引用的函数("funcs")和/或变量("vars"), 设置true表示同时删除未引用的函数和变量
-            keep_classnames: false, // default: false,传递true以防止压缩器丢弃类名
-            keep_fnames: false, // default: false,传递true以防止压缩器丢弃函数名
+            // defaults:true,默认true,传递false禁用大多数默认启用的compress转换
+            arguments: true, // 默认false,尽可能将参数[index]替换为函数参数名
+            dead_code: true, // 默认true,删除无法访问的代码(比如return后面的语句)
+            toplevel: false, // 默认false,在顶级作用域中删除未引用的函数("funcs")和/或变量("vars"), 设置true表示同时删除未引用的函数和变量
+            keep_classnames: false, // 默认false,传递true以防止terser丢弃类名
+            keep_fnames: false, // 默认false,传递true以防止terser丢弃函数名
+            drop_console: false, // 默认false,设置true会删掉丢掉对console.*函数的调用
+            // pure_funcs: ['console.log'], // 告诉terser,console.log没有副作用,terser会将它删除
           },
           /**
            * mangle,默认值true,会将keep_classnames,keep_fnames,toplevel等等mangle options的所有选项设为true。
            * 传递false以跳过篡改名称，或者传递一个对象来指定篡改选项
            */
           mangle: true,
-          toplevel: true, // default false,如果希望启用顶级变量和函数名修改,并删除未使用的变量和函数,则设置为true。
-          keep_classnames: true, // default: undefined,传递true以防止丢弃或混淆类名。
-          keep_fnames: true, // default: false,传递true以防止函数名被丢弃或混淆。
+          toplevel: false, // 注意：terserOptions.toplevel被标记了deprecated。默认false,如果希望启用顶级变量和函数名修改,并删除未使用的变量和函数,则设置为true。
+          keep_classnames: true, // 默认undefined,传递true以防止丢弃或混淆类名。
+          keep_fnames: false, // 默认false,传递true以防止函数名被丢弃或混淆。
+          // TODO 外层的keep_classnames和keep_fnames和compress的有啥区别or优先级？
         },
       }),
       new CssMinimizerPlugin({

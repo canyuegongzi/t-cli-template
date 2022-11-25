@@ -1,4 +1,4 @@
-import { outputStaticUrl } from 'script/utils/outputStaticUrl';
+import { outputStaticUrl } from 'script/constant';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import type { RouteRecordRaw } from 'vue-router';

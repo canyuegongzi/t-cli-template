@@ -10,9 +10,15 @@ import { merge } from 'webpack-merge';
 import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
 
 import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
-import { eslintEnable, outputDir, analyzerEnable } from '../constant';
+import {
+  eslintEnable,
+  outputDir,
+  analyzerEnable,
+  outputStaticUrl,
+  windicssEnable,
+  htmlWebpackPluginTitle,
+} from '../constant';
 import { chalkINFO, chalkWARN } from '../utils/chalkTip';
-import { outputStaticUrl } from '../utils/outputStaticUrl';
 import { resolveApp } from '../utils/path';
 import devConfig from './webpack.dev';
 import prodConfig from './webpack.prod';
@@ -165,14 +171,6 @@ const commonConfig = (isProduction) => {
       // 用于解析webpack的loader
       modules: ['node_modules'],
     },
-    cache: {
-      type: 'filesystem',
-      buildDependencies: {
-        // https://webpack.js.org/configuration/cache/#cacheallowcollectingmemory
-        // 建议cache.buildDependencies.config: [__filename]在您的 webpack 配置中设置以获取最新配置和所有依赖项。
-        config: [__filename],
-      },
-    },
     module: {
       noParse: /^(vue|vue-router)$/,
       // loader执行顺序：从下往上，从右往左
@@ -286,7 +284,7 @@ const commonConfig = (isProduction) => {
           sideEffects: true,
         },
         {
-          test: /\.(jpg|jpeg|png|gif|svg)$/,
+          test: /\.(jpg|jpeg|png|gif|svg|webp)$/,
           type: 'asset',
           generator: {
             filename: 'img/[name]-[contenthash:6][ext]',
@@ -312,11 +310,11 @@ const commonConfig = (isProduction) => {
       // 解析vue
       new VueLoaderPlugin(),
       // windicss
-      // new WindiCSSWebpackPlugin(),
+      windicssEnable && new WindiCSSWebpackPlugin(),
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        title: 'vue3-webpack5-template',
+        title: htmlWebpackPluginTitle,
         template: resolveApp('./public/index.html'),
         hash: true,
         minify: isProduction
@@ -358,7 +356,7 @@ const commonConfig = (isProduction) => {
       }),
       // 定义全局变量
       new DefinePlugin({
-        BASE_URL: `${JSON.stringify(outputStaticUrl(isProduction))}`, // public下的index.html里面的icon的路径
+        BASE_URL: `${JSON.stringify(outputStaticUrl(isProduction))}`, // public下的index.html里面的favicon.ico的路径
         'process.env': {
           NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
           PUBLIC_PATH: JSON.stringify(outputStaticUrl(isProduction)),
