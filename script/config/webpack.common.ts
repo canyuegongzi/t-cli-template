@@ -1,4 +1,5 @@
 import FriendlyErrorsWebpackPlugin from '@soda/friendly-errors-webpack-plugin';
+import BilldHtmlWebpackPlugin from 'billd-html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -9,7 +10,6 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
 
-import InjectProjectInfoPlugin from '../InjectProjectInfoPlugin';
 import {
   eslintEnable,
   outputDir,
@@ -63,7 +63,7 @@ const sassRules = (isProduction: boolean, module?: boolean) => {
       options: {
         sourceMap: false,
         // 根据sass-loader9.x以后使用additionalData，9.x以前使用prependData
-        // additionalData: `@use '~@/assets/css/global/global.scss';`,
+        additionalData: `@use 'billd-scss/src/index.scss' as *;`,
       },
     },
   ].filter(Boolean);
@@ -335,8 +335,8 @@ const commonConfig = (isProduction) => {
         chunks: ['main'], // 要仅包含某些块，您可以限制正在使用的块
       }),
       // 注入项目信息
-      new InjectProjectInfoPlugin({
-        isProduction,
+      new BilldHtmlWebpackPlugin({
+        vuecli5: true,
       }),
       // 将已存在的单个文件或整个目录复制到构建目录。
       new CopyWebpackPlugin({

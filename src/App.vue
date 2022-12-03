@@ -1,5 +1,7 @@
 <template>
   <div class="app-wrap">
+    <div class="test"></div>
+    <div class="test1">232</div>
     <div>
       <img
         src="@/assets/img/author.jpg"
@@ -40,6 +42,14 @@ export default defineComponent({
   // background-color: red;
   // @extend %flexCenter;
   // @include fullBox;
+  .test {
+    width: 50px;
+    height: 50px;
+    @include cross(red, 10px);
+  }
+  .test1 {
+    @include minFont(10);
+  }
 }
 .aaa {
   // @include colorText();

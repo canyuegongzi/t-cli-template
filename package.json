@@ -5,7 +5,6 @@
     "type": "git",
     "url": "https://github.com/galaxy-s10/vue3-webpack5-template.git"
   },
-  "license": "MIT",
   "author": "shuisheng <2274751790@qq.com>",
   "scripts": {
     "build": "webpack --config ./script/config/webpack.common.ts --env production",
@@ -30,6 +29,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "billd-html-webpack-plugin": "^0.0.11",
+    "billd-scss": "^0.0.6",
+    "billd-utils": "^0.0.3",
     "pinia": "^2.0.11",
     "vue": "^3.2.31",
     "vue-demi": "^0.13.11",
@@ -64,7 +66,7 @@
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^7.2.6",
-    "html-webpack-plugin": "^5.3.1",
+    "html-webpack-plugin": "^5.5.0",
     "html-webpack-tags-plugin": "^3.0.1",
     "husky": "^7.0.0",
     "lint-staged": "^12.1.4",
@@ -91,7 +93,7 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.2",
     "webpack-merge": "^5.7.3",
-    "webpackbar": "^5.0.0-3",
+    "webpackbar": "^5.0.2",
     "windicss-webpack-plugin": "^1.7.7"
   }
 }
