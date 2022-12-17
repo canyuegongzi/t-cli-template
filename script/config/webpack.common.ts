@@ -9,6 +9,9 @@ import { DefinePlugin, Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
+import webpack from 'webpack';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defineOptions = require('unplugin-vue-define-options/webpack');
 
 import {
   eslintEnable,
@@ -22,8 +25,10 @@ import { chalkINFO, chalkWARN } from '../utils/chalkTip';
 import { resolveApp } from '../utils/path';
 import devConfig from './webpack.dev';
 import prodConfig from './webpack.prod';
+import path from 'path';
 
 console.log(chalkINFO(`读取: ${__filename.slice(__dirname.length + 1)}`));
+console.log(path.resolve(__dirname, '../../src/styles/variables.scss'));
 
 const sassRules = (isProduction: boolean, module?: boolean) => {
   return [
@@ -64,6 +69,12 @@ const sassRules = (isProduction: boolean, module?: boolean) => {
         sourceMap: false,
         // 根据sass-loader9.x以后使用additionalData，9.x以前使用prependData
         additionalData: `@use 'billd-scss/src/index.scss' as *;`,
+      },
+    },
+    {
+      loader: 'sass-resources-loader',
+      options: {
+        resources: [path.resolve(__dirname, '../../src/styles/variables.scss')],
       },
     },
   ].filter(Boolean);
@@ -145,7 +156,17 @@ const commonConfig = (isProduction) => {
     },
     resolve: {
       // 解析路径
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'], // 解析扩展名
+      extensions: [
+        '.ts',
+        '.js',
+        '.jsx',
+        '.tsx',
+        '.vue',
+        '.json',
+        '.scss',
+        '.css',
+        '.less',
+      ],
       alias: {
         '@': resolveApp('./src'), // 设置路径别名
         script: resolveApp('./script'), // 设置路径别名
@@ -284,8 +305,18 @@ const commonConfig = (isProduction) => {
           sideEffects: true,
         },
         {
+          test: /\.svg$/, // svg 单独配置
+          loader: 'svg-sprite-loader',
+          include: [path.resolve('src/assets/svg')],
+          options: {
+            symbolId: 'icon-[name]',
+          },
+        },
+        {
           test: /\.(jpg|jpeg|png|gif|svg|webp)$/,
           type: 'asset',
+          dependency: { not: ['url'] }, // 排除来自新 URL 处理的 asset
+          exclude: [path.resolve('src/assets/svg')], //
           generator: {
             filename: 'img/[name]-[contenthash:6][ext]',
           },
@@ -305,10 +336,16 @@ const commonConfig = (isProduction) => {
       ],
     },
     plugins: [
+      // 解决：process is not undefined
+      new webpack.ProvidePlugin({ process: 'process/browser' }),
+      new webpack.NoEmitOnErrorsPlugin(), // 帮助减少不需要的信息展示
       // 友好的显示错误信息在终端
       new FriendlyErrorsWebpackPlugin(),
       // 解析vue
       new VueLoaderPlugin(),
+      defineOptions({
+        include: [/\.vue$/, /\.vue\?vue/],
+      }),
       // windicss
       windicssEnable && new WindiCSSWebpackPlugin(),
       // 该插件将为您生成一个HTML5文件，其中包含使用脚本标签的所有Webpack捆绑包

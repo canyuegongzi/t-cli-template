@@ -8,7 +8,7 @@ export const eslintEnable = false; // 是否开启eslint（开发环境会读取
 export const webpackBarEnable = false; // 是否开启WebpackBar（开发环境会读取它），只要是插件就会影响构建速度，开发环境关掉它吧
 export const analyzerEnable = false; // 是否开启Webpack包分析
 export const gzipEnable = false; // 是否开启http压缩
-export const windicssEnable = false; // 是否开启windicss
+export const windicssEnable = true; // 是否开启windicss
 export const htmlWebpackPluginTitle = 'vue3-webpack5-template'; // htmlWebpackPlugin的标题
 
 export const outputStaticUrl = (isProduction: boolean) => {

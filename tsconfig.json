@@ -2,23 +2,38 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
-    "noImplicitAny": false,
-    "lib": ["dom", "esnext"],
+    "moduleResolution": "Node",
+    "strict": false,
     "jsx": "preserve",
-    "moduleResolution": "node",
-    "esModuleInterop": true, // ES 模块互操作,import React from 'react';react是module.exports导出的，因此需要设置该属性
-    "forceConsistentCasingInFileNames": true, // 在文件名中强制使用一致的大小写
-    "skipLibCheck": true, // 跳过d.ts声明文件的类型检查。
-    "resolveJsonModule": true, //解析json模块
-    "baseUrl": "./",
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "strictFunctionTypes": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "lib": ["dom", "esnext"],
+    "incremental": true,
     "paths": {
-      "@/*": ["src/*"],
-      "script/*": ["script/*"]
-    }
-    // "paths": {
-    //   "@/*": ["./src/*"] // 这样写的话，@/不会提示路径，得使用baseUrl:'./'+paths:{"@/*": ["src/*"]}这样才的话@/才会提示路径
-    // }
+      "@/*": ["./src/*"],
+      "script/*": ["./script/*"],
+      "@build/*": ["./build/*"]
+    },
+    "typeRoots": ["./node_modules/@types/", "./types"],
+    "types": [
+      "node", "webpack-env", "element-plus/global",
+      "vite/client",
+      "@pureadmin/table/volar",
+      "@pureadmin/descriptions/volar",
+      "unplugin-vue-define-options/macros-global",
+      "@iconify/vue/dist/offline.d.ts",
+      "@iconify/vue/dist/iconify.d.ts",
+    ]
   },
   // ts-node的时候会读取这里的配置
   "ts-node": {
@@ -33,9 +48,13 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "script/**/*.ts",
+
+    "./mock/*.ts",
+    "./types/*.d.ts",
     "./.eslintrc.js",
     "./babel.config.js",
     "./postcss.config.js",
-    "windi.config.ts"
-  ]
+    "tailwind.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }

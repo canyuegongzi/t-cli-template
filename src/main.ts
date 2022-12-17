@@ -1,19 +1,40 @@
-import './main.scss';
-
-import { version } from 'billd-utils';
 import { createApp } from 'vue';
-
 import App from './App.vue';
-
-import router from '@/router/index';
-import store from '@/store/index';
-
-// import 'windi.css'; // windicss-webpack-plugin会解析windi.css这个MODULE_ID
+// 全局引入指令
+import directive from '@/directives';
+import registerElementPlus from '@/plugins/elementPlus';
+import registerGlobalConfig from '@/plugins/globalConfig';
+import '@/plugins/tailwind';
 
 const app = createApp(App);
 
-app.use(store);
-app.use(router);
+import router from '@/router';
+import store from '@/store';
+app.use(router).use(store);
 
+// 全局样式
+import '@/styles/index.scss';
+
+// 全局引入 elment-plus 和 icon
+registerElementPlus(app);
+registerGlobalConfig();
+
+// 引入svg-icon组件
+import loadSvg from '@/assets';
+loadSvg(app);
+
+// 路由权限校验
+import './permission';
+import i18n from '@/plugins/i18n';
+
+directive(app);
+
+console.log('=====process.env', process.env);
+
+// mock接口模拟
+if (process.env.RUN_ENV === 'mock') {
+  require('./mock');
+}
+// require('./mock');
+app.use(i18n);
 app.mount('#app');
-console.log('billd-utils version:', version);
