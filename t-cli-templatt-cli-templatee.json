@@ -19,6 +19,24 @@
       "description": "node + typescript开发、调试环境"
     },
     {
+      "name": "web-vite-vue3-typescript",
+      "type": "web",
+      "url": [
+        "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#web-vite-vue3-typescript",
+        "direct:https://github.com/canyuegongzi/t-cli.git#web-vite-vue3-typescript"
+      ],
+      "description": "web端typescript + vite + vue3 模板"
+    },
+    {
+      "name": "web-webpack5-vue3-typescript",
+      "type": "web",
+      "url": [
+        "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#web-webpack5-vue3-typescript",
+        "direct:https://github.com/canyuegongzi/t-cli.git#web-webpack5-vue3-typescript"
+      ],
+      "description": "web端typescript + webpack5 + vue3 模板"
+    },
+    {
       "name": "web-webpack4-typescript",
       "type": "web",
       "url": [
