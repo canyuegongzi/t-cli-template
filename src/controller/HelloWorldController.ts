@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
-import {HelloWorldService} from '../service/HelloWorldService';
-import {CreatHelloWorldDto} from '../model/DTO/helloWorld/CreatHelloWorldDto';
-import {MessageType, ResultData} from '../common/result/ResultData';
+import { HelloWorldService } from '../service/HelloWorldService';
+import { CreatHelloWorldDto } from '../model/DTO/helloWorld/CreatHelloWorldDto';
+import { MessageType, ResultData } from '../common/result/ResultData';
 
 @Controller('helloWorld')
 export class HelloWorldController {
@@ -16,6 +16,20 @@ export class HelloWorldController {
         try {
             await this.helloWorldService.create(helloWorldData);
             return new ResultData(MessageType.CREATE, helloWorldData, true);
+        } catch (e) {
+            console.log(e);
+            return new ResultData(MessageType.CREATE, e, false);
+        }
+    }
+
+    /**
+     * 添加测试数据
+     */
+    @Get('list')
+    public async list() {
+        try {
+            const data = await this.helloWorldService.getList();
+            return new ResultData(MessageType.CREATE, data, true);
         } catch (e) {
             console.log(e);
             return new ResultData(MessageType.CREATE, e, false);

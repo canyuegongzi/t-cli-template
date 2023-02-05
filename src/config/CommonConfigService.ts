@@ -1,7 +1,7 @@
-import {CommonConfigInterface} from './CommonConfigInterface';
+import { CommonConfigInterface } from './CommonConfigInterface';
 import { parse, stringify } from 'yaml';
 import * as fs from 'fs';
-import {join} from 'path';
+import { join } from 'path';
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 const devConfig = fs.readFileSync(join(__dirname, '.', 'application.dev.yaml'), 'utf-8');
 const proConfig = fs.readFileSync(join(__dirname, '.', 'application.pro.yaml'), 'utf-8');
@@ -57,7 +57,7 @@ export const CommonConfigService = (() => {
             return config;
         }
         config = new CommonConfig();
-        return config
-    }
-})()
-export {emailConfig, serverConfig};
+        return config;
+    };
+})();
+export { emailConfig, serverConfig };
