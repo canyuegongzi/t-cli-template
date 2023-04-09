@@ -107,6 +107,15 @@
         "direct:https://github.com/canyuegongzi/t-cli.git#web-webpack5-vue2-typescript"
       ],
       "description": "web端 webpack5 + vue2 + typescript 模板"
+    },
+    {
+      "name": "vue3-webpack5-qiankun-app-tmplate",
+      "type": "web",
+      "url": [
+        "direct:https://gitee.com/canyuegongzi/t-cli-templatt-cli-templatee.git#vue3-webpack5-qiankun-app-tmplate",
+        "direct:https://github.com/canyuegongzi/t-cli.git#vue3-webpack5-qiankun-app-tmplate"
+      ],
+      "description": "web端 webpack5 + vue3 + typescript + qiankun 模板"
     }
   ],
   "categoryList": ["web", "server"]
