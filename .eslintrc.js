@@ -1,37 +1,121 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    sourceType: 'module',
-  },
-  plugins: [ '@typescript-eslint/eslint-plugin' ],
-  extends: [
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-    'prettier/@typescript-eslint',
-  ],
   root: true,
   env: {
     node: true,
-    jest: true,
   },
+  globals: {
+    // Ref sugar (take 2)
+    $: 'readonly',
+    $$: 'readonly',
+    $ref: 'readonly',
+    $shallowRef: 'readonly',
+    $computed: 'readonly',
+
+    // index.d.ts
+    // global.d.ts
+    Fn: 'readonly',
+    PromiseFn: 'readonly',
+    RefType: 'readonly',
+    LabelValueOptions: 'readonly',
+    EmitType: 'readonly',
+    TargetContext: 'readonly',
+    ComponentElRef: 'readonly',
+    ComponentRef: 'readonly',
+    ElRef: 'readonly',
+    global: 'readonly',
+    ForDataType: 'readonly',
+    ComponentRoutes: 'readonly',
+
+    // script setup
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
+  },
+  extends: [
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
+    '@vue/prettier',
+    '@vue/eslint-config-typescript',
+  ],
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    jsxPragma: 'React',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.vue'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
+    {
+      files: ['*.vue'],
+      parser: 'vue-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.vue'],
+        ecmaVersion: 'latest',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      rules: {
+        'no-undef': 'off',
+      },
+    },
+  ],
   rules: {
-    '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/no-namespace': 'off',
+    'vue/no-v-html': 'off',
+    'no-async-promise-executor': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/require-explicit-emits': 'off',
+    'vue/multi-word-component-names': 'off',
+    '@typescript-eslint/no-explicit-any': 'off', // any
+    'no-debugger': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off', // setup()
     '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    'prefer-rest-params': 'off',
-    '@typescript-eslint/no-this-alias': 'off',
-    'semi':[ 'error','always' ],
-    'prefer-spread': 'off',
-    "array-bracket-spacing": [ "error","always" ],
-    "object-curly-spacing": [ "error","always" ]
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'always',
+          normal: 'always',
+          component: 'always',
+        },
+        svg: 'always',
+        math: 'always',
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
+    'no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };
