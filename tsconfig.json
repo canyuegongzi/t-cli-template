@@ -1,17 +1,60 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "strict": false,
+    "jsx": "preserve",
+    "importHelpers": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "target": "es2015",
+    "strictFunctionTypes": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "lib": ["dom", "esnext"],
     "incremental": true,
-    "moduleResolution": "node"
+    "paths": {
+      "@/*": ["./src/*"],
+      "script/*": ["./script/*"],
+      "@build/*": ["./build/*"]
+    },
+    "typeRoots": ["./node_modules/@types/", "./types"],
+    "types": [
+      "node", "webpack-env", "element-plus/global",
+      "vite/client",
+      "@pureadmin/table/volar",
+      "@pureadmin/descriptions/volar",
+      "unplugin-vue-define-options/macros-global",
+      "@iconify/vue/dist/offline.d.ts",
+      "@iconify/vue/dist/iconify.d.ts",
+    ]
   },
-  "exclude": [ "dist", "node_modules"]
+  // ts-node的时候会读取这里的配置
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs" // 指定生成什么模块代码。
+    },
+    "transpileOnly": true // 只编译，报警告或者错误一样运行
+  },
+  // 仅仅匹配这些文件，除了src以外的文件都不会被匹配
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "script/**/*.ts",
+
+    "./mock/*.ts",
+    "./types/*.d.ts",
+    "./.eslintrc.js",
+    "./babel.config.js",
+    "./postcss.config.js",
+    "tailwind.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }
